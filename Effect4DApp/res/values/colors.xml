@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="RED">#ffff0000</color>
+    <color name="BLUE">#ff0000ff</color>
+    <color name="GREEN">#ff00ff00</color>
+    <color name="MAGENTA">#ffff00ff</color>
+    <color name="YELLOW">#ffffff00</color>
+    <color name="WHITE">#ffffffff</color>
+    <color name="BLACK">#ff000000</color>
+    <color name="GRAY10">#19000000</color>
+    <color name="GRAY20">#33000000</color>
+    <color name="GRAY50">#7f000000</color>
+    <color name="GRAY10NA">#ff191919</color>
+    <color name="GRAY20NA">#ff333333</color>
+    <color name="GRAY50NA">#ff7f7f7f</color>
+    <color name="BACKGROUND">#ff303030</color>
+    <color name="WHITEGRAY">#ffA0A0A0</color>
+</resources>

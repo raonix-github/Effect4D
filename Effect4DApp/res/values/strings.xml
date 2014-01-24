@@ -4,5 +4,7 @@
     <string name="app_name">Effect4DApp</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="empty"></string>
+    <string name="title_activity_setting">SettingActivity</string>
 
 </resources>
