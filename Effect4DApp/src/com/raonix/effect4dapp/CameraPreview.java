@@ -17,16 +17,12 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
     CameraPreview(Context context) {
         super(context);
         
-        // SurfaceHolder.Callback�� ���������ν� Surface�� ��/�Ҹ�Ǿ�����
-        // �� �� �ֽ��ϴ�.
         mHolder = getHolder();
         mHolder.addCallback(this);
-//        mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
-        // Surface�� ��Ǿ�ٸ�, ī�޶��� �ν��Ͻ��� �޾ƿ� �� ī�޶���
-        // Preview �� ǥ���� ��ġ�� �����մϴ�.
         mCamera = Camera.open(0);
         try {
            mCamera.setPreviewDisplay(holder);
@@ -38,16 +34,12 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void surfaceDestroyed(SurfaceHolder holder) {
-        // �ٸ� ȭ������ ���ư���, Surface�� �Ҹ�˴ϴ�. ��� ī�޶��� Preview�� 
-        // �����ؾ� �մϴ�. ī�޶�� ������ �� �ִ� �ڿ��� �ƴϱ⿡, ������� ����
-        // ��� -��Ƽ��Ƽ�� �Ͻ����� ���°� �� ��� �� - �ڿ��� ��ȯ�ؾ��մϴ�.
         mCamera.stopPreview();
         mCamera.release();
         mCamera = null;
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-        // ǥ���� ������ ũ�⸦ �˾����Ƿ� �ش� ũ��� Preview�� �����մϴ�.
         Camera.Parameters parameters = mCamera.getParameters();
         parameters.setPreviewSize(w, h);
         mCamera.setParameters(parameters);

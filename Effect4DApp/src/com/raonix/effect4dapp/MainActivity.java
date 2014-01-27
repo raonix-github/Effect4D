@@ -1,7 +1,5 @@
 package com.raonix.effect4dapp;
 
-import java.io.UnsupportedEncodingException;
-
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -11,7 +9,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 public class MainActivity extends Activity {
@@ -19,17 +16,16 @@ public class MainActivity extends Activity {
 	HA210 mHA210;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 	    requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | 0x80000000,
+		getWindow().setFlags(
+				WindowManager.LayoutParams.FLAG_FULLSCREEN | 0x80000000,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN | 0x80000000);
-
-//		setContentView(R.layout.activity_main);
-		setContentView(R.layout.activity_run);
 		
-		initView();
-
+		
+		
 		// must initialize HA210
 		byte [] devicenum = {1,1,1,1};
 		mHA210 = new HA210();
@@ -37,7 +33,12 @@ public class MainActivity extends Activity {
 		mHA210.setDeviceNum(devicenum);
 		mHA210.changeCamera(1);
 		
+
+//		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_run);
 		
+		initView();
+
 		// Light On/Off Test
 		// TODO
 		mHA210.setLightOne(1, 1, 1, 0);
