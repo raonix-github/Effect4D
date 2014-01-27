@@ -1,5 +1,7 @@
 package com.raonix.effect4dapp;
 
+import java.io.UnsupportedEncodingException;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -27,13 +29,13 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_run);
 		
 		initView();
-		mHA210.changeCamera(1);
 
 		// must initialize HA210
 		byte [] devicenum = {1,1,1,1};
 		mHA210 = new HA210();
 		mHA210.init(getApplicationContext());
 		mHA210.setDeviceNum(devicenum);
+		mHA210.changeCamera(1);
 		
 		
 		// Light On/Off Test
@@ -68,6 +70,8 @@ public class MainActivity extends Activity {
 		((ImageView) findViewById(R.id.menu_img_title))
 				.setImageResource(R.drawable.menutitle_home);
 
+		mContent=(ViewGroup) findViewById(R.id.sub_screen_content);
+
 		mBtnRun=(Button) findViewById(R.id.menu_01);
 		mBtnStop=(Button) findViewById(R.id.menu_02);
 		mBtnPause=(Button) findViewById(R.id.menu_03);
@@ -78,8 +82,6 @@ public class MainActivity extends Activity {
 		mBtnPause.setBackgroundResource(R.drawable.btn_pause);
 		mBtnLight.setBackgroundResource(R.drawable.btn_light);
 		
-		mContent=(ViewGroup) findViewById(R.id.sub_screen_content);
-		
 		mImgSetting.setOnClickListener(new View.OnClickListener()
 			{
 				@Override
@@ -89,7 +91,38 @@ public class MainActivity extends Activity {
 					startActivity(intent);
 				}
 			});
+		
+		mBtnRun.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+//				if(mHA210.setPlayerPlay() > 0) {
+//				}
+				mBtnRun.setSelected(true);
+				mBtnStop.setSelected(false);
+				mBtnPause.setSelected(false);
+				mHA210.setPlayerPlay();
+			}
+		});
 
+		mBtnStop.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mBtnRun.setSelected(false);
+				mBtnStop.setSelected(true);
+				mBtnPause.setSelected(false);
+				mHA210.setPlayerStop();
+			}
+		});
+
+		mBtnPause.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mBtnRun.setSelected(false);
+				mBtnStop.setSelected(false);
+				mBtnPause.setSelected(true);
+				mHA210.setPlayerPause();
+			}			
+		});
 	}
 
 	@Override
@@ -105,7 +138,6 @@ public class MainActivity extends Activity {
 		super.onResume();
 		startCameraPreview();
 	}
-	
 	
 	private void startCameraPreview()
 	{

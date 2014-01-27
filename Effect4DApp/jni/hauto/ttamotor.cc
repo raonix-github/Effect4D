@@ -274,7 +274,7 @@ int TTAMotor::Set(int grid, int swid, int cmd,
 	}
 	else
 	{
-		LOGE("IO: not support group");
+		LOGE("Motor: not support group");
 		return -1;
 	}
 
@@ -287,7 +287,7 @@ int TTAMotor::Set(int grid, int swid, int cmd,
 			rc = TTARequest(ctx, ttareq, &ttarsp);
 			if(rc < 0)
 			{
-				LOGE("IO : fail to set. retry %d times", i);
+				LOGE("Motor: fail to set. retry %d times", i);
 				continue;
 			}
 			else
@@ -302,7 +302,7 @@ int TTAMotor::Set(int grid, int swid, int cmd,
 		rc = TTARequest(ctx, ttareq, &ttarsp);
 		if(rc < 0)
 		{
-			LOGE("IO : fail to set");
+			LOGE("Motor: fail to set");
 			goto ret;
 		}
 

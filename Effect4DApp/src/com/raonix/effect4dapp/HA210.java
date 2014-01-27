@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -176,6 +177,44 @@ public class HA210 {
 	
 	public int setIORelay(int grid, int swid, int val, int mask) {
 		return nativeHAutoIOSetRelay(grid, swid, val, mask);
+	}
+
+	//
+	// Player
+	//
+	public int setPlayerPlay() {
+		int rc = -1;
+		try {
+			rc = setPlayer(0x00, "play".getBytes("US_ASCII"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return rc;
+	}
+	public int setPlayerStop() {
+		int rc = -1;
+		try {
+			rc = setPlayer(0x00, "stop".getBytes("US_ASCII"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return rc;
+	}
+	public int setPlayerPause() {
+		int rc = -1;
+		try {
+			rc = setPlayer(0x00, "pause".getBytes("US_ASCII"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return rc;
+	}
+
+
+	public int setPlayer(int cmd, byte [] vals) {
+		return nativeHAutoPlayerSet(0, 1, cmd, vals, vals.length);
 	}
 	
 	///////////////////////////////////////////////
@@ -781,7 +820,7 @@ public class HA210 {
 	private native int nativeHAutoLightGetCharacter(int grid, byte [] character);
 	private native int nativeHAutoLightSetOne(int grid, int swid, int on, int dim);
 	private native int nativeHAutoLightSetAll(int grid, int swid, int on);
-
+	
 	// Player
 	private native int nativeHAutoPlayerScan();
 	private native int nativeHAutoPlayerGetState(int grid, byte [] state);
