@@ -11,10 +11,10 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity
+{
+	private Effect4DApplication mApp;
 	
-	HA210 mHA210;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -23,33 +23,12 @@ public class MainActivity extends Activity {
 		getWindow().setFlags(
 				WindowManager.LayoutParams.FLAG_FULLSCREEN | 0x80000000,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN | 0x80000000);
-		
-		
-		
-		// must initialize HA210
-		byte [] devicenum = {1,1,1,1};
-		mHA210 = new HA210();
-		mHA210.init(getApplicationContext());
-		mHA210.setDeviceNum(devicenum);
-		mHA210.changeCamera(1);
-		
 
-//		setContentView(R.layout.activity_main);
 		setContentView(R.layout.activity_run);
 		
-		initView();
-
-		// Light On/Off Test
-		// TODO
-		mHA210.setLightOne(1, 1, 1, 0);
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		mHA210.setLightOne(1, 1, 0, 0);
+		mApp=(Effect4DApplication) getApplicationContext();
 		
+		initView();
 	}
 	
 
@@ -65,7 +44,6 @@ public class MainActivity extends Activity {
 	private void initView()
 	{
 		mImgSetting=(ImageView) findViewById(R.id.menu_btn_home);
-//		mImgSetting.setBackgroundResource(R.drawable.btn_setting);
 		mImgSetting.setImageResource(R.drawable.btn_setting);
 
 		((ImageView) findViewById(R.id.menu_img_title))
@@ -80,8 +58,13 @@ public class MainActivity extends Activity {
 		
 		mBtnRun.setBackgroundResource(R.drawable.btn_run);
 		mBtnStop.setBackgroundResource(R.drawable.btn_stop);
-		mBtnPause.setBackgroundResource(R.drawable.btn_pause);
+		mBtnPause.setVisibility(View.INVISIBLE);
 		mBtnLight.setBackgroundResource(R.drawable.btn_light);
+
+		mBtnRun.setSelected(false);
+		mBtnStop.setSelected(true);
+		mBtnLight.setSelected(false);
+
 		
 		mImgSetting.setOnClickListener(new View.OnClickListener()
 			{
@@ -93,35 +76,28 @@ public class MainActivity extends Activity {
 				}
 			});
 		
+
 		mBtnRun.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-//				if(mHA210.setPlayerPlay() > 0) {
-//				}
-				mBtnRun.setSelected(true);
-				mBtnStop.setSelected(false);
-				mBtnPause.setSelected(false);
-				mHA210.setPlayerPlay();
+				mApp.setPlayerPlay();
 			}
 		});
 
 		mBtnStop.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				mBtnRun.setSelected(false);
-				mBtnStop.setSelected(true);
-				mBtnPause.setSelected(false);
-				mHA210.setPlayerStop();
+				mApp.setPlayerStop();
 			}
 		});
 
-		mBtnPause.setOnClickListener(new View.OnClickListener() {
+		mBtnLight.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				mBtnRun.setSelected(false);
-				mBtnStop.setSelected(false);
-				mBtnPause.setSelected(true);
-				mHA210.setPlayerPause();
+				if(v.isSelected())
+					mApp.setLightOff();
+				else
+					mApp.setLightOn();
 			}			
 		});
 	}
@@ -146,13 +122,6 @@ public class MainActivity extends Activity {
 		
 		mPreview = new CameraPreview(this);
 		mContent.addView(mPreview);
-
-// layout���� �̹� ���� �����Ǿ� �ֽ�.
-//		FrameLayout.LayoutParams params=
-//				(FrameLayout.LayoutParams) mPreview.getLayoutParams();
-//		int m=getResources().getDimensionPixelSize(R.dimen.MarginDefault);
-//		params.setMargins(m, m, m, m);
-//		mPreview.setLayoutParams(params);
 	}
 	
 	private void stopCameraPreview()
@@ -165,7 +134,8 @@ public class MainActivity extends Activity {
 
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;

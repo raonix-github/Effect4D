@@ -179,6 +179,9 @@ public class HA210 {
 		return nativeHAutoIOSetRelay(grid, swid, val, mask);
 	}
 
+	
+	
+	
 	//
 	// Player
 	//
@@ -216,6 +219,12 @@ public class HA210 {
 	public int setPlayer(int cmd, byte [] vals) {
 		return nativeHAutoPlayerSet(0, 1, cmd, vals, vals.length);
 	}
+
+	
+	
+	
+	
+	
 	
 	///////////////////////////////////////////////
 	// called by JNI when device state has changed

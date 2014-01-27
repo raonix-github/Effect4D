@@ -17,7 +17,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/sync_delay"
+        android:id="@+id/effect_sync_delay"
         android:layout_width="@dimen/setting_left"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -25,7 +25,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
-        android:id="@+id/btn_minus"
+        android:id="@+id/btn_effect_minus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -34,7 +34,7 @@
         android:text="@string/empty" />
 
     <Button
-        android:id="@+id/btn_plus"
+        android:id="@+id/btn_effect_plus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"

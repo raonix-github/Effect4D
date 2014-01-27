@@ -1,25 +1,25 @@
 package com.raonix.effect4dapp;
 
-import java.util.zip.Inflater;
-
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.TextView;
 
 public class SettingActivity extends Activity
 {
+	private static final float SYNC_STEP=0.5F;
+	
 	private LayoutInflater mInflater;
+	private Effect4DApplication mApp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -31,6 +31,7 @@ public class SettingActivity extends Activity
 		setContentView(R.layout.activity_setting);
 
 		mInflater=(LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		mApp=(Effect4DApplication) getApplicationContext();
 		
 		initView();
 	}
@@ -47,6 +48,8 @@ public class SettingActivity extends Activity
 	private ImageView mImgHome;
 	private Button mBtnGeneral;
 	private Button mBtnList;
+	private TextView mSyncVideo;
+	private TextView mSyncEffect;
 	
 	private void initView()
 	{
@@ -63,7 +66,9 @@ public class SettingActivity extends Activity
 		((Button)findViewById(R.id.menu_04)).setVisibility(View.INVISIBLE);
 		
 		mBtnGeneral.setBackgroundResource(R.drawable.btn_basic);
+		mBtnGeneral.setSelected(true);
 		mBtnList.setBackgroundResource(R.drawable.btn_list);
+		
 
 		mImgHome.setOnClickListener(new View.OnClickListener()
 			{
@@ -78,9 +83,63 @@ public class SettingActivity extends Activity
 
 		mInflater.inflate(R.layout.set_itm_dataupload, content);
 		mInflater.inflate(R.layout.set_itm_datadownload, content);
-		mInflater.inflate(R.layout.set_itm_videosync, content);
-		mInflater.inflate(R.layout.set_itm_effectsync, content);
+
+		View v=mInflater.inflate(R.layout.set_itm_videosync, content);
+		mSyncVideo=(TextView)v.findViewById(R.id.video_sync_delay);
+		Button btn=(Button)v.findViewById(R.id.btn_video_minus);
+		btn.setOnClickListener(new OnClickListener()
+			{
+				@Override
+				public void onClick(View v)
+				{
+					mApp.setVideoSync(mApp.getVideoSync()-SYNC_STEP);
+					refresh();
+				}
+			});
+
+		btn=(Button)v.findViewById(R.id.btn_video_plus);
+		btn.setOnClickListener(new OnClickListener()
+			{
+				@Override
+				public void onClick(View v)
+				{
+					mApp.setVideoSync(mApp.getVideoSync()+SYNC_STEP);
+					refresh();
+				}
+			});
+		
+		
+		v=mInflater.inflate(R.layout.set_itm_effectsync, content);
+		mSyncEffect=(TextView)v.findViewById(R.id.effect_sync_delay);
+		btn=(Button)v.findViewById(R.id.btn_effect_minus);
+		btn.setOnClickListener(new OnClickListener()
+			{
+				@Override
+				public void onClick(View v)
+				{
+					mApp.setEffectSync(mApp.getEffectSync()-SYNC_STEP);
+					refresh();
+				}
+			});
+
+		btn=(Button)v.findViewById(R.id.btn_effect_plus);
+		btn.setOnClickListener(new OnClickListener()
+			{
+				@Override
+				public void onClick(View v)
+				{
+					mApp.setEffectSync(mApp.getEffectSync()+SYNC_STEP);
+					refresh();
+				}
+			});
+		
+		refresh();
 	}
 	
-
+	private void refresh()
+	{
+		String ele=getResources().getString(R.string.ele_sync);
+		mSyncEffect.setText(Float.toString(mApp.getEffectSync())+ele);
+		mSyncVideo.setText(Float.toString(mApp.getVideoSync())+ele);
+	}
 }
