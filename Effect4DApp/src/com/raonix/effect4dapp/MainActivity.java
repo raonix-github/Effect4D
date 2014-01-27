@@ -109,13 +109,13 @@ public class MainActivity extends Activity {
 		
 		mPreview = new CameraPreview(this);
 		mContent.addView(mPreview);
-		FrameLayout.LayoutParams params=
-				(FrameLayout.LayoutParams) mPreview.getLayoutParams();
 
-		String mpx=getResources().getString(R.dimen.MarginDefault);
-		int m=(int)(Float.parseFloat(mpx.substring(0, mpx.length()-2)));
-		params.setMargins(m, m, m, m);
-		mPreview.setLayoutParams(params);
+// layout에서 이미 마진 지정되어 있슴.
+//		FrameLayout.LayoutParams params=
+//				(FrameLayout.LayoutParams) mPreview.getLayoutParams();
+//		int m=getResources().getDimensionPixelSize(R.dimen.MarginDefault);
+//		params.setMargins(m, m, m, m);
+//		mPreview.setLayoutParams(params);
 	}
 	
 	private void stopCameraPreview()

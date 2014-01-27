@@ -1,16 +1,25 @@
 package com.raonix.effect4dapp;
 
+import java.util.zip.Inflater;
+
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
 public class SettingActivity extends Activity
 {
+	private LayoutInflater mInflater;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -20,6 +29,8 @@ public class SettingActivity extends Activity
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | 0x80000000,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN | 0x80000000);
 		setContentView(R.layout.activity_setting);
+
+		mInflater=(LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
 		initView();
 	}
@@ -62,6 +73,12 @@ public class SettingActivity extends Activity
 					finish();
 				}
 			});
+
+		LinearLayout content=(LinearLayout) findViewById(R.id.sub_screen_content);
+		mInflater.inflate(R.layout.set_itm_dataupload, content);
+		mInflater.inflate(R.layout.set_itm_datadownload, content);
+		mInflater.inflate(R.layout.set_itm_videosync, content);
+		mInflater.inflate(R.layout.set_itm_effectsync, content);
 	}
 	
 

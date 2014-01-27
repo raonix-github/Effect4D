@@ -6,5 +6,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="empty"></string>
     <string name="title_activity_setting">SettingActivity</string>
+    <string name="la_data_upload">데이타 업로드</string>
+    <string name="la_data_download">데이타 다운로드</string>
+    <string name="la_sync_video_play">영상재생 싱크</string>
+    <string name="la_sync_effect_play">효과재생 싱크</string>
+    <string name="ele_sync">초 후 재생</string>
 
 </resources>

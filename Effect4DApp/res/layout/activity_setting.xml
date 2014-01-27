@@ -19,7 +19,7 @@
         android:layout_margin="@dimen/MarginMain"
         android:background="@color/YELLOW" >
 
-        <include layout="@layout/screen_contect"/>
+        <include layout="@layout/activity_setting_content"/>
 
     </FrameLayout>
         

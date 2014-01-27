@@ -11,5 +11,7 @@
     <dimen name="cell_height">77px</dimen>
     <dimen name="cell_half_width">71px</dimen>
     <dimen name="cell_half_space">6px</dimen>
+    <dimen name="setting_left">200px</dimen>
+    <dimen name="setting_left_padding">23px</dimen>
 
 </resources>

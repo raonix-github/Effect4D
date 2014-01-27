@@ -7,8 +7,8 @@
 
     <LinearLayout
         android:id="@+id/LinearLayout2"
-        android:layout_height="match_parent"
         android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/BACKGROUND"
         android:baselineAligned="false"
         android:orientation="vertical" >
@@ -26,7 +26,6 @@
                 android:layout_marginRight="@dimen/cell_half_space"
                 android:contentDescription="@string/empty"
                 android:src="@drawable/btn_home" />
-
         </LinearLayout>
 
         <ImageView
@@ -35,7 +34,7 @@
             android:layout_height="@dimen/cell_height"
             android:layout_margin="@dimen/MarginDefault"
             android:contentDescription="@string/empty"
-        	android:src="@drawable/menutitle_home" />
+            android:src="@drawable/menutitle_home" />
 
         <Button
             android:id="@+id/menu_01"
@@ -62,11 +61,19 @@
             android:layout_margin="@dimen/MarginDefault" />
     </LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/sub_screen_content"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/BACKGROUND" >
-    </FrameLayout>
+        android:layout_margin="@dimen/MarginDefault"
+        android:background="@color/WHITEGRAY" >
+
+        <LinearLayout
+	        android:id="@+id/sub_screen_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
