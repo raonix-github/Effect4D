@@ -16,4 +16,12 @@
         android:text="@string/la_data_upload"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
+    <Button
+        android:id="@+id/btn_upload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/btn_upload"
+        android:text="@string/empty" />
+
 </LinearLayout>

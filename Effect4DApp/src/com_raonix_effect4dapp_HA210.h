@@ -9,8 +9,8 @@ extern "C" {
 #endif
 #undef com_raonix_effect4dapp_HA210_HAUTO_EVENT
 #define com_raonix_effect4dapp_HA210_HAUTO_EVENT 0L
-#undef com_raonix_effect4dapp_HA210_INTERPHONE_EVENT
-#define com_raonix_effect4dapp_HA210_INTERPHONE_EVENT 1L
+#undef com_raonix_effect4dapp_HA210_INTERPHONE_nativeHAutoDeviceSetNumEVENT
+#define com_raonix_effect4dapp_HA210_INTERPHONE_nativeHAutoDeviceSetNumEVENT 1L
 #undef com_raonix_effect4dapp_HA210_SYSTEM_EVENT
 #define com_raonix_effect4dapp_HA210_SYSTEM_EVENT 2L
 #undef com_raonix_effect4dapp_HA210_SECURITY_EVENT
@@ -190,6 +190,14 @@ JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoIOGetCharact
  */
 JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoIOSetRelay
   (JNIEnv *, jobject, jint, jint, jint, jint);
+
+/*
+ * Class:     com_raonix_effect4dapp_HA210
+ * Method:    nativeSystemChangeCamera
+ * Signature: (I)I
+ */
+JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeSystemChangeCamera
+  (JNIEnv *, jobject, jint);
 
 /*
  * Class:     com_raonix_effect4dapp_HA210

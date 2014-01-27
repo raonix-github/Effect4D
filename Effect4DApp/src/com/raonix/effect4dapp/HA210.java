@@ -204,6 +204,10 @@ public class HA210 {
 		// TODO
 	}
 	
+	public int changeCamera(int ch) {
+		return nativeSystemChangeCamera(ch);
+	}
+
 	public int setHWWatchdogEnable(boolean on) {
 		return nativeSystemHWWatchdogEnable(on);
 	}
@@ -800,6 +804,7 @@ public class HA210 {
 	
 	// System
 	// H/W Watchdog
-	private native int nativeSystemHWWatchdogEnable( boolean on);
+	private native int nativeSystemChangeCamera(int ch);
+	private native int nativeSystemHWWatchdogEnable(boolean on);
 	private native int nativeSystemHWWatchdogRefresh();
 }

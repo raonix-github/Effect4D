@@ -146,6 +146,28 @@ int gpio_write(int gpio, int val)
 /*
  * System
  */
+#define VIDIOC_USER_SET_VDEC_CHANNEL            200
+int system_camera_change(int ch)
+{
+	int fd;
+
+	fd = open (VDEC_DEV, O_RDWR /* required */ | O_NONBLOCK, 0);
+	if (-1 == fd)
+	{
+		perror(VDEC_DEV);
+		return -1;
+	}
+
+	if (ioctl(fd, VIDIOC_USER_SET_VDEC_CHANNEL, &ch) < 0)
+	{
+		perror("ioctl");
+		close(fd);
+		return -1;
+	}
+	close(fd);
+
+	return 0;
+}
 
 int hwwatchdog_get(int cmd, int *val)
 {

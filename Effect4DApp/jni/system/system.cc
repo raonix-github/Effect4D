@@ -14,6 +14,7 @@
 extern "C" {
 #endif
 
+extern int system_camera_change(int ch);
 extern int system_enable_hwwatchdog(int on);
 extern int system_refresh_hwwatchdog();
 
@@ -41,6 +42,11 @@ void System::Init()
 
 void System::Destroy()
 {
+}
+
+int System::ChangeCamera(int ch)
+{
+	return system_camera_change(ch);
 }
 
 int System::EnableHWWatchdog(bool on)

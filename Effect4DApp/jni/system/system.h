@@ -27,6 +27,7 @@ public:
 	void Init();
 	void Destroy();
 
+	int ChangeCamera(int ch);
 	int EnableHWWatchdog(bool on);
 	int RefreshHWWatchdog();
 

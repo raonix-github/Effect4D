@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import android.content.Context;
 import android.hardware.Camera;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -11,20 +12,22 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
     SurfaceHolder mHolder;
     Camera mCamera;
     
+	private int mCameraFacing =  Camera.CameraInfo.CAMERA_FACING_BACK;
+    
     CameraPreview(Context context) {
         super(context);
         
-        // SurfaceHolder.CallbackÀ» ¼³Á¤ÇÔÀ¸·Î½á Surface°¡ »ý¼º/¼Ò¸êµÇ¾úÀ½À»
-        // ¾Ë ¼ö ÀÖ½À´Ï´Ù.
+        // SurfaceHolder.Callbackï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î½ï¿½ Surfaceï¿½ï¿½ ï¿½ï¿½/ï¿½Ò¸ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½ï¿½
+        // ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö½ï¿½ï¿½Ï´ï¿½.
         mHolder = getHolder();
         mHolder.addCallback(this);
 //        mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
-        // Surface°¡ »ý¼ºµÇ¾ú´Ù¸é, Ä«¸Þ¶óÀÇ ÀÎ½ºÅÏ½º¸¦ ¹Þ¾Æ¿Â ÈÄ Ä«¸Þ¶óÀÇ
-        // Preview ¸¦ Ç¥½ÃÇÒ À§Ä¡¸¦ ¼³Á¤ÇÕ´Ï´Ù.
-        mCamera = Camera.open(1);
+        // Surfaceï¿½ï¿½ ï¿½ï¿½Ç¾ï¿½Ù¸ï¿½, Ä«ï¿½Þ¶ï¿½ï¿½ï¿½ ï¿½Î½ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¿ï¿½ ï¿½ï¿½ Ä«ï¿½Þ¶ï¿½ï¿½ï¿½
+        // Preview ï¿½ï¿½ Ç¥ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
+        mCamera = Camera.open(0);
         try {
            mCamera.setPreviewDisplay(holder);
         } catch (IOException exception) {
@@ -35,16 +38,16 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void surfaceDestroyed(SurfaceHolder holder) {
-        // ´Ù¸¥ È­¸éÀ¸·Î µ¹¾Æ°¡¸é, Surface°¡ ¼Ò¸êµË´Ï´Ù. µû¶ó¼­ Ä«¸Þ¶óÀÇ Previewµµ 
-        // ÁßÁöÇØ¾ß ÇÕ´Ï´Ù. Ä«¸Þ¶ó´Â °øÀ¯ÇÒ ¼ö ÀÖ´Â ÀÚ¿øÀÌ ¾Æ´Ï±â¿¡, »ç¿ëÇÏÁö ¾ÊÀ»
-        // °æ¿ì -¾×Æ¼ºñÆ¼°¡ ÀÏ½ÃÁ¤Áö »óÅÂ°¡ µÈ °æ¿ì µî - ÀÚ¿øÀ» ¹ÝÈ¯ÇØ¾ßÇÕ´Ï´Ù.
+        // ï¿½Ù¸ï¿½ È­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Æ°ï¿½ï¿½ï¿½, Surfaceï¿½ï¿½ ï¿½Ò¸ï¿½Ë´Ï´ï¿½. ï¿½ï¿½ï¿½ Ä«ï¿½Þ¶ï¿½ï¿½ï¿½ Previewï¿½ï¿½ 
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ ï¿½Õ´Ï´ï¿½. Ä«ï¿½Þ¶ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½Æ´Ï±â¿¡, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        // ï¿½ï¿½ï¿½ -ï¿½ï¿½Æ¼ï¿½ï¿½Æ¼ï¿½ï¿½ ï¿½Ï½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â°ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ - ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ø¾ï¿½ï¿½Õ´Ï´ï¿½.
         mCamera.stopPreview();
         mCamera.release();
         mCamera = null;
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-        // Ç¥½ÃÇÒ ¿µ¿ªÀÇ Å©±â¸¦ ¾Ë¾ÒÀ¸¹Ç·Î ÇØ´ç Å©±â·Î Preview¸¦ ½ÃÀÛÇÕ´Ï´Ù.
+        // Ç¥ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å©ï¿½â¸¦ ï¿½Ë¾ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ ï¿½Ø´ï¿½ Å©ï¿½ï¿½ï¿½ Previewï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
         Camera.Parameters parameters = mCamera.getParameters();
         parameters.setPreviewSize(w, h);
         mCamera.setParameters(parameters);

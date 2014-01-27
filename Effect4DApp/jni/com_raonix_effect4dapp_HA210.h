@@ -193,6 +193,14 @@ JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoIOSetRelay
 
 /*
  * Class:     com_raonix_effect4dapp_HA210
+ * Method:    nativeSystemChangeCamera
+ * Signature: (I)I
+ */ 
+JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeSystemChangeCamera
+	  (JNIEnv *, jobject, jint);
+
+/*
+ * Class:     com_raonix_effect4dapp_HA210
  * Method:    nativeSystemHWWatchdogEnable
  * Signature: (Z)I
  */

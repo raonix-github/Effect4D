@@ -27,6 +27,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_run);
 		
 		initView();
+		mHA210.changeCamera(1);
 
 		// must initialize HA210
 		byte [] devicenum = {1,1,1,1};
@@ -45,12 +46,14 @@ public class MainActivity extends Activity {
 			e.printStackTrace();
 		}
 		mHA210.setLightOne(1, 1, 0, 0);
+		
 	}
 	
 
 	private ImageView mImgSetting;
 	private Button mBtnRun;
 	private Button mBtnStop;
+	private Button mBtnPause;
 	private Button mBtnLight;
 
 	private ViewGroup mContent;
@@ -67,11 +70,12 @@ public class MainActivity extends Activity {
 
 		mBtnRun=(Button) findViewById(R.id.menu_01);
 		mBtnStop=(Button) findViewById(R.id.menu_02);
-		((Button)findViewById(R.id.menu_03)).setVisibility(View.INVISIBLE);
+		mBtnPause=(Button) findViewById(R.id.menu_03);
 		mBtnLight=(Button) findViewById(R.id.menu_04);
 		
 		mBtnRun.setBackgroundResource(R.drawable.btn_run);
 		mBtnStop.setBackgroundResource(R.drawable.btn_stop);
+		mBtnPause.setBackgroundResource(R.drawable.btn_pause);
 		mBtnLight.setBackgroundResource(R.drawable.btn_light);
 		
 		mContent=(ViewGroup) findViewById(R.id.sub_screen_content);
@@ -110,7 +114,7 @@ public class MainActivity extends Activity {
 		mPreview = new CameraPreview(this);
 		mContent.addView(mPreview);
 
-// layout¿¡¼­ ÀÌ¹Ì ¸¶Áø ÁöÁ¤µÇ¾î ÀÖ½¿.
+// layoutï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ ï¿½Ö½ï¿½.
 //		FrameLayout.LayoutParams params=
 //				(FrameLayout.LayoutParams) mPreview.getLayoutParams();
 //		int m=getResources().getDimensionPixelSize(R.dimen.MarginDefault);
@@ -133,5 +137,4 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-
 }

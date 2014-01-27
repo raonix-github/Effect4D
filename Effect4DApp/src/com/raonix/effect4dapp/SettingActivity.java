@@ -62,7 +62,7 @@ public class SettingActivity extends Activity
 		((Button)findViewById(R.id.menu_03)).setVisibility(View.INVISIBLE);
 		((Button)findViewById(R.id.menu_04)).setVisibility(View.INVISIBLE);
 		
-		mBtnGeneral.setBackgroundResource(R.drawable.btn_general);
+		mBtnGeneral.setBackgroundResource(R.drawable.btn_basic);
 		mBtnList.setBackgroundResource(R.drawable.btn_list);
 
 		mImgHome.setOnClickListener(new View.OnClickListener()
