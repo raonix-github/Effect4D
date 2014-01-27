@@ -75,6 +75,7 @@ public class SettingActivity extends Activity
 			});
 
 		LinearLayout content=(LinearLayout) findViewById(R.id.sub_screen_content);
+
 		mInflater.inflate(R.layout.set_itm_dataupload, content);
 		mInflater.inflate(R.layout.set_itm_datadownload, content);
 		mInflater.inflate(R.layout.set_itm_videosync, content);

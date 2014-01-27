@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/setting_itm_height"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/MarginDefault"
     android:paddingLeft="@dimen/MarginMain"
     android:paddingRight="@dimen/MarginMain"
-    android:paddingTop="@dimen/MarginDefault"
-    android:paddingBottom="@dimen/MarginDefault"
-    android:orientation="horizontal" >
+    android:paddingTop="@dimen/MarginDefault" >
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:text="@string/la_data_upload"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </LinearLayout>
