@@ -13,11 +13,9 @@
 
 #define CMD_TYPE_REQ_STATE			0x01
 #define CMD_TYPE_REQ_CHAR			0x0f
-#define CMD_TYPE_REQ_SET			0x40
 
 #define CMD_TYPE_RSP_STATE			0x81
 #define CMD_TYPE_RSP_CHAR			0x8f
-#define CMD_TYPE_RSP_SET			0xC0
 
 extern tta_t *ctx;
 
@@ -26,7 +24,7 @@ namespace raonix
 
 TTAPlayer::TTAPlayer(string name)
 	: poll_interval_(2000000),
-	  TTADevice(0x71, name)
+	  TTADevice(0x80, name)
 {
 	player_info_t *grp;
 	player_config_t *conf;
@@ -34,7 +32,7 @@ TTAPlayer::TTAPlayer(string name)
 	int i;
 
 	name_ = name;
-	dev_id_ = 0x71;
+	dev_id_ = 0x80;
 
 	for(i=0; i<15; i++)
 	{
@@ -42,14 +40,6 @@ TTAPlayer::TTAPlayer(string name)
 		memset(grp, 0, sizeof(player_info_t));
 
 		state = &nogrp_[i].newstate;
-		memset(state, 0xff, sizeof(player_state_t));
-
-		conf->version = 1;
-
-		grp = &grp_[i];
-		memset(grp, 0, sizeof(player_info_t));
-
-		state = &grp_[i].newstate;
 		memset(state, 0xff, sizeof(player_state_t));
 
 		conf->version = 1;
@@ -121,9 +111,6 @@ void TTAPlayer::Poll()
 			memcpy(oldstate, newstate, sizeof(player_state_t));
 		}
 	}
-
-	// Group
-	// TODO
 }
 
 void TTAPlayer::Scan()
@@ -253,6 +240,126 @@ out:
 	{
 		ttamsg_free(ttarsp);
 	}
+
+	return rc;
+}
+
+int TTAPlayer::GetControlData(int grid, int swid, int offset,
+		unsigned char *buf)
+{
+	ttamsg_t *ttareq=NULL, *ttarsp=NULL;
+	ttamsg_hd_t *hd;
+	player_info_t *grp;
+	unsigned char subid;
+	unsigned char error;
+	unsigned char pl[3];
+	int i;
+	int rc;
+
+	if(grid == 0)
+	{
+		grp = &nogrp_[swid];
+	}
+	else
+	{
+		LOGE("Player: not support group");
+		return -1;
+	}
+
+	subid = (grid << 4) | swid;
+	pl[0] = 0x02;	// upload
+	pl[1] = (offset >> 8) & 0xff;
+	pl[2] = offset & 0xff;
+	ttareq = ttamsg_make(dev_id_, subid, 0x41, pl, 3);
+	rc = TTARequest(ctx, ttareq, &ttarsp);
+	if(rc < 0)
+	{
+		LOGE("Player: fail to get state");
+		goto ret;
+	}
+
+	// Check response header
+	hd = ttarsp->hd;
+	if(((hd->subid >> 4) != grid) || ((hd->subid & 0xf) != swid))
+	{
+		LOGE("Player: invalid data");
+		rc = -1;
+		goto ret;
+	}
+
+	error = ttarsp->data[0];
+	// TODO : handle error
+
+	rc = hd->datalen;
+	for(i=1; i<rc; i++)
+	{
+		buf[i-1] = ttarsp->data[i];
+	}
+
+ret:
+	if(ttarsp)
+	{
+		ttamsg_free(ttarsp);
+	}
+
+	return rc;
+}
+
+int TTAPlayer::SetControlData(int grid, int swid, int offset,
+		unsigned char *buf, int buflen)
+{
+	ttamsg_t *ttareq=NULL, *ttarsp=NULL;
+	ttamsg_hd_t *hd;
+	player_info_t *grp;
+	player_state_t *state;
+	unsigned char subid;
+	unsigned char error;
+	unsigned char *pl = NULL;
+	int pllen;
+	int rc;
+
+	if(grid == 0)
+	{
+		grp = &nogrp_[swid];
+	}
+	else
+	{
+		LOGE("Player: not support group");
+		return -1;
+	}
+
+	subid = (grid << 4) | swid;
+	pl = (unsigned char *)malloc(buflen+3);
+	pl[0] = 0x01; 	// download
+	pl[1] = (offset >> 8) & 0xff;
+	pl[2] = offset & 0xff;
+	memcpy(pl+3, buf, buflen);
+	pllen = buflen + 3;
+
+	ttareq = ttamsg_make(dev_id_, subid, 0x41, buf, buflen);
+	rc = TTARequest(ctx, ttareq, &ttarsp);
+	if(rc < 0)
+	{
+		LOGE("Player: fail to set");
+		goto ret;
+	}
+
+	hd = ttarsp->hd;
+	grid = hd->subid >> 4;	// Group ID
+	swid = hd->subid & 0xf;	// Switch ID
+
+	error = ttarsp->data[0];
+	// TODO : handle error
+
+	state = &grp->newstate;
+	state->state = ttarsp->data[1];
+
+ret:
+	if(pl)
+		free(pl);
+
+	if(ttarsp)
+		ttamsg_free(ttarsp);
 
 	return rc;
 }

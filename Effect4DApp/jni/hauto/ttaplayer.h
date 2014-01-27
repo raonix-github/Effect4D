@@ -56,6 +56,10 @@ public:
 	int Set (int grid, int swid, int cmd,
 		unsigned char *buf, int buflen);
  
+	int GetControlData(int grid, int swid, int offset, unsigned char *buf);
+	int SetControlData(int grid, int swid, int offset, unsigned char *buf,
+			int buflen);
+
 	// signals
 	sigslot::signal1<int> SignalHAutoEvent;
 	sigslot::signal2<int,int> SignalStateChanged;

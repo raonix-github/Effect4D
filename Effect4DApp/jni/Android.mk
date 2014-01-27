@@ -5,8 +5,6 @@ LOCAL_CPP_EXTENSION := .cpp .cc
 
 LOCAL_SRC_FILES := \
 	hauto/ttaplayer.cc \
-	hauto/ttamotor.cc \
-	hauto/ttaio.cc \
 	hauto/ttalight.cc \
 	hauto/ttalight_dasan.cc \
 	hauto/hauto.cc

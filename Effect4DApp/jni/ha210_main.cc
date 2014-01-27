@@ -320,85 +320,11 @@ JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoPlayerSet
 
 /*
  * Class:     com_raonix_effect4dapp_HA210
- * Method:    nativeHAutoMotorControllerScan
- * Signature: ()I
- */
-JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoMotorControllerScan
-  (JNIEnv *env, jobject object)
-{
-	if (hauto_)
-	{
-		return hauto_->MotorScan();
-	}
-	return -1;
-}
-
-/*
- * Class:     com_raonix_effect4dapp_HA210
- * Method:    nativeHAutoMotorControllerGetState
+ * Method:    nativeHAutoPlayerGetControlData
  * Signature: (I[B)I
  */
-JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoMotorControllerGetState
-  (JNIEnv *env, jobject object, jint grid, jbyteArray state)
-{
-	jbyte *arr;
-	int rc = -1;
-
-	if (hauto_)
-	{
-		arr = env->GetByteArrayElements(state, NULL);
-		if (arr == NULL)
-		{
-			LOGE("Error : Get array's elements");
-			return -1;
-		}
-
-		rc = hauto_->MotorGetState(grid, (unsigned char *)arr);
-
-		env->ReleaseByteArrayElements(state, arr, 0);
-		return rc;
-	}
-
-	return -1;
-}
-
-/*
- * Class:     com_raonix_effect4dapp_HA210
- * Method:    nativeHAutoMotorControllerGetCharacter
- * Signature: (I[B)I
- */
-JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoMotorControllerGetCharacter
-  (JNIEnv *env, jobject object, jint grid, jbyteArray character)
-{
-	jbyte *arr;
-	int rc = -1;
-
-	if (hauto_)
-	{
-		arr = env->GetByteArrayElements(character, NULL);
-		if (arr == NULL)
-		{
-			LOGE("Error : Get array's elements");
-			return -1;
-		}
-
-		rc = hauto_->MotorGetCharacter(grid, (unsigned char *)arr);
-
-		env->ReleaseByteArrayElements(character, arr, 0);
-		return rc;
-	}
-
-	return -1;
-}
-
-/*
- * Class:     com_raonix_effect4dapp_HA210
- * Method:    nativeHAutoMotorControllerSet
- * Signature: (III[BI)I
- */
-JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoMotorControllerSet
-  (JNIEnv *env, jobject object, jint grid, jint swid, jint cmd,
-   jbyteArray buf, jint buflen)
+JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoPlayerGetControlData
+  (JNIEnv *env, jobject object, jint offset, jbyteArray buf)
 {
 	jbyte *arr;
 	int rc = -1;
@@ -412,7 +338,7 @@ JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoMotorControl
 			return -1;
 		}
 
-		rc = hauto_->MotorSet(grid, swid, cmd,  (unsigned char *)arr, buflen);
+		rc = hauto_->PlayerGetControlData(0, 1, offset, (unsigned char *)arr);
 
 		env->ReleaseByteArrayElements(buf, arr, 0);
 		return rc;
@@ -423,89 +349,30 @@ JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoMotorControl
 
 /*
  * Class:     com_raonix_effect4dapp_HA210
- * Method:    nativeHAutoIOScan
- * Signature: ()I
+ * Method:    nativeHAutoPlayerSetControlData
+ * Signature: (I[BI)I
  */
-JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoIOScan
-	(JNIEnv *env, jobject object)
-{
-	if (hauto_)
-	{
-		return hauto_->IOScan();
-	}
-	return -1;
-}
-
-/*
- * Class:     com_raonix_effect4dapp_HA210
- * Method:    nativeHAutoIOGetState
- * Signature: (I[B)I
- */
-JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoIOGetState
-	(JNIEnv *env, jobject object, jint grid, jbyteArray state)
+JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoPlayerSetControlData
+  (JNIEnv *env, jobject object, jint offset, jbyteArray buf, jint buflen)
 {
 	jbyte *arr;
 	int rc = -1;
 
 	if (hauto_)
 	{
-		arr = env->GetByteArrayElements(state, NULL);
+		arr = env->GetByteArrayElements(buf, NULL);
 		if (arr == NULL)
 		{
 			LOGE("Error : Get array's elements");
 			return -1;
 		}
 
-		rc = hauto_->IOGetState(grid, (unsigned char *)arr);
+		rc = hauto_->PlayerSetControlData(0, 1, offset,  (unsigned char *)arr, buflen);
 
-		env->ReleaseByteArrayElements(state, arr, 0);
+		env->ReleaseByteArrayElements(buf, arr, 0);
 		return rc;
 	}
 
-	return -1;
-}
-
-/*
- * Class:     com_raonix_effect4dapp_HA210
- * Method:    nativeHAutoIOGetCharacter
- * Signature: (I[B)I
- */
-JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoIOGetCharacter
-	(JNIEnv *env, jobject object, jint grid, jbyteArray character)
-{
-	jbyte *arr;
-	int rc = -1;
-
-	if (hauto_)
-	{
-		arr = env->GetByteArrayElements(character, NULL);
-		if (arr == NULL)
-		{
-			LOGE("Error : Get array's elements");
-			return -1;
-		}
-
-		rc = hauto_->IOGetCharacter(grid, (unsigned char *)arr);
-
-		env->ReleaseByteArrayElements(character, arr, 0);
-		return rc;
-	}
-
-	return -1;
-}
-
-/*
- * Class:     com_raonix_effect4dapp_HA210
- * Method:    nativeHAutoIOSetRelay
- * Signature: (IIII)I
- */
-JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoIOSetRelay
-	(JNIEnv *env, jobject object, jint grid, jint swid, jint val, jint mask)
-{
-	if (hauto_)
-	{
-		return hauto_->IOSetRelay(grid, swid, val, mask);
-	}
 	return -1;
 }
 
@@ -521,6 +388,7 @@ JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoIOSetRelay
 JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeSystemChangeCamera
   (JNIEnv *env, jobject object, jint ch)
 {
+	LOGD("[TRC %s:%d]", __func__, __LINE__);
 	if (system_)
 	{
 		return system_->ChangeCamera(ch);

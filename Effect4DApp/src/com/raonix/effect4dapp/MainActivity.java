@@ -58,7 +58,8 @@ public class MainActivity extends Activity
 		
 		mBtnRun.setBackgroundResource(R.drawable.btn_run);
 		mBtnStop.setBackgroundResource(R.drawable.btn_stop);
-		mBtnPause.setVisibility(View.INVISIBLE);
+//		mBtnPause.setVisibility(View.INVISIBLE);
+		mBtnPause.setBackgroundResource(R.drawable.btn_pause);
 		mBtnLight.setBackgroundResource(R.drawable.btn_light);
 
 		mBtnRun.setSelected(false);

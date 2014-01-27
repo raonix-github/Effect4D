@@ -10,8 +10,6 @@
 #include "ttalight.h"
 #include "ttalight_dasan.h"
 #include "ttaplayer.h"
-#include "ttamotor.h"
-#include "ttaio.h"
 
 namespace raonix
 {
@@ -22,16 +20,12 @@ class HAuto: public sigslot::has_slots<>
 private:
 	void OnSignalHAutoEvent(int event);
 	void OnSignalLightStateChanged(int grid, int swid);
-	void OnSignalIOStateChanged(int grid, int swid);
 	void OnSignalPlayerStateChanged(int grid, int swid);
-	void OnSignalMotorStateChanged(int grid, int swid);
 
 	JavaObjectReference *reference_;
 //	raonix::TTALight *hauto_light_;
 	raonix::TTALightDasan *hauto_light_;
-	raonix::TTAIO *hauto_io_;
 	raonix::TTAPlayer *hauto_player_;
-	raonix::TTAMotor *hauto_motor_;
 
 public:
 	~HAuto();
@@ -46,20 +40,14 @@ public:
 	int LightSetOne(int grid, int swid, int on, int dim);
 	int LightSetAll(int grid, int swid, int on);
 
-	int IOScan();
-	int IOGetState(int grid, unsigned char *state);
-	int IOGetCharacter(int grid, unsigned char *character);
-	int IOSetRelay(int grid, int swid, int val, int mask);
-
 	int PlayerScan();
 	int PlayerGetState(int grid, unsigned char *state);
 	int PlayerGetCharacter(int grid, unsigned char *character);
 	int PlayerSet(int grid, int swid, int cmd, unsigned char *buf, int buflen);
 
-	int MotorScan();
-	int MotorGetState(int grid, unsigned char *state);
-	int MotorGetCharacter(int grid, unsigned char *character);
-	int MotorSet(int grid, int swid, int cmd, unsigned char *buf, int buflen);
+	int PlayerGetControlData(int grid, int swid, int offset, unsigned char *buf);
+	int PlayerSetControlData(int grid, int swid, int offset, unsigned char *buf,
+			int buflen);
 
 	enum Event
 	{

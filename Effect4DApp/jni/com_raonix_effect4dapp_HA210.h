@@ -129,67 +129,19 @@ JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoPlayerSet
 
 /*
  * Class:     com_raonix_effect4dapp_HA210
- * Method:    nativeHAutoMotorControllerScan
- * Signature: ()I
- */
-JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoMotorControllerScan
-  (JNIEnv *, jobject);
-
-/*
- * Class:     com_raonix_effect4dapp_HA210
- * Method:    nativeHAutoMotorControllerGetState
+ * Method:    nativeHAutoPlayerGetControlData
  * Signature: (I[B)I
  */
-JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoMotorControllerGetState
+JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoPlayerGetControlData
   (JNIEnv *, jobject, jint, jbyteArray);
 
 /*
  * Class:     com_raonix_effect4dapp_HA210
- * Method:    nativeHAutoMotorControllerGetCharacter
- * Signature: (I[B)I
+ * Method:    nativeHAutoPlayerSetControlData
+ * Signature: (I[BI)I
  */
-JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoMotorControllerGetCharacter
-  (JNIEnv *, jobject, jint, jbyteArray);
-
-/*
- * Class:     com_raonix_effect4dapp_HA210
- * Method:    nativeHAutoMotorControllerSet
- * Signature: (III[BI)I
- */
-JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoMotorControllerSet
-  (JNIEnv *, jobject, jint, jint, jint, jbyteArray, jint);
-
-/*
- * Class:     com_raonix_effect4dapp_HA210
- * Method:    nativeHAutoIOScan
- * Signature: ()I
- */
-JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoIOScan
-  (JNIEnv *, jobject);
-
-/*
- * Class:     com_raonix_effect4dapp_HA210
- * Method:    nativeHAutoIOGetState
- * Signature: (I[B)I
- */
-JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoIOGetState
-  (JNIEnv *, jobject, jint, jbyteArray);
-
-/*
- * Class:     com_raonix_effect4dapp_HA210
- * Method:    nativeHAutoIOGetCharacter
- * Signature: (I[B)I
- */
-JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoIOGetCharacter
-  (JNIEnv *, jobject, jint, jbyteArray);
-
-/*
- * Class:     com_raonix_effect4dapp_HA210
- * Method:    nativeHAutoIOSetRelay
- * Signature: (IIII)I
- */
-JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoIOSetRelay
-  (JNIEnv *, jobject, jint, jint, jint, jint);
+JNIEXPORT jint JNICALL Java_com_raonix_effect4dapp_HA210_nativeHAutoPlayerSetControlData
+  (JNIEnv *, jobject, jint, jbyteArray, jint);
 
 /*
  * Class:     com_raonix_effect4dapp_HA210

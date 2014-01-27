@@ -12,8 +12,6 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
     SurfaceHolder mHolder;
     Camera mCamera;
     
-	private int mCameraFacing =  Camera.CameraInfo.CAMERA_FACING_BACK;
-    
     CameraPreview(Context context) {
         super(context);
         

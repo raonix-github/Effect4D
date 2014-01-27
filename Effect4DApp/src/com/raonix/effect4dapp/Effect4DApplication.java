@@ -17,10 +17,11 @@ public class Effect4DApplication extends Application
 	{
 		// must initialize HA210
 		byte [] devicenum = {1,1,1,1};
-//		mHA210 = new HA210();
-//		mHA210.init(this);
-//		mHA210.setDeviceNum(devicenum);
-//		mHA210.changeCamera(1);
+		mHA210 = new HA210();
+		mHA210.init(this);
+//		mHA210.init(getApplicationContext());
+		mHA210.setDeviceNum(devicenum);
+		mHA210.changeCamera(1);
 		
 		mPlayerStatus=PlayerStatus.STOP;
 		mLightStatus=LightStatus.OFF;

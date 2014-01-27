@@ -46,6 +46,7 @@ void System::Destroy()
 
 int System::ChangeCamera(int ch)
 {
+	LOGD("[TRC %s:%d]", __func__, __LINE__);
 	return system_camera_change(ch);
 }
 

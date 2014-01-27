@@ -26,9 +26,7 @@ HAuto::~HAuto()
 {
 	LOGI("HAuto::~HAuto");
 	delete hauto_light_;
-	delete hauto_io_;
 	delete hauto_player_;
-	delete hauto_motor_;
 }
 
 void HAuto::Init()
@@ -70,25 +68,6 @@ void HAuto::Init()
 
 	hauto_player_->start();
 #endif
-
-#if 1
-	hauto_motor_ = new raonix::TTAMotor("TTA Motor");
-
-	hauto_motor_->SignalStateChanged.connect(
-			this, &HAuto::OnSignalMotorStateChanged);
-
-	hauto_motor_->start();
-#endif
-
-#if 1
-	hauto_io_ = new raonix::TTAIO("TTA IO");
-
-	hauto_io_->SignalStateChanged.connect(
-			this, &HAuto::OnSignalIOStateChanged);
-
-	hauto_io_->start();
-#endif
-
 }
 
 void HAuto::Destroy()
@@ -104,19 +83,10 @@ int HAuto::DeviceSetNum(unsigned char *num)
 	{
 		hauto_light_->SetDeviceNum(1, 0);
 	}
-	if(hauto_io_)
-	{
-		hauto_io_->SetDeviceNum(0, 1);
-	}
 	if(hauto_player_)
 	{
 		hauto_player_->SetDeviceNum(0, 1);
 	}
-	if(hauto_motor_)
-	{
-		hauto_motor_->SetDeviceNum(0, 1);
-	}
-
 	return 0;
 }
 
@@ -228,104 +198,6 @@ void HAuto::OnSignalLightStateChanged(int grid, int swid)
 }
 
 //
-// IO
-//
-int HAuto::IOScan()
-{
-	if(hauto_io_)
-	{
-		hauto_io_->Scan();
-		return 0;
-	}
-
-	return -1;
-}
-
-int HAuto::IOGetState(int grid, unsigned char *state)
-{
-	int rc;
-
-	if(hauto_io_)
-	{
-		rc = hauto_io_->GetState(0x0, grid);
-		if(rc < 0)
-		{
-			return -1;
-		}
-		rc = sizeof(io_state_t);
-		memcpy(state, &hauto_io_->nogrp_[grid].newstate, rc);
-		return rc;
-	}
-
-	return -1;
-}
-
-int HAuto::IOGetCharacter(int grid, unsigned char *character)
-{
-	int rc;
-
-	if(hauto_io_)
-	{
-		rc = hauto_io_->GetCharacter(0x0, grid);
-		if(rc < 0)
-		{
-			return -1;
-		}
-
-		rc = sizeof(io_config_t);
-		memcpy(character, &hauto_io_->nogrp_[grid].config, rc);
-		return rc;
-	}
-
-	return -1;
-}
-
-int HAuto::IOSetRelay(int grid, int swid, int val, int mask)
-{
-	if(hauto_io_)
-	{
-		return hauto_io_->SetRelay(0, grid, val, mask);
-	}
-
-	return -1;
-}
-
-
-void HAuto::OnSignalIOStateChanged(int grid, int swid)
-{
-	io_state_t *state;
-	int sz = sizeof(io_state_t);
-
-	CALLBACK_START("handleIOStateChanged", "(III[B)V", reference_);
-	if (mid != NULL)
-	{
-		jbyteArray byteArray;
-
-		byteArray = env->NewByteArray(sz);
-		if(byteArray == NULL)
-		{
-			LOGE("Error :  NewByteArray");
-			return;
-		}
-
-		if(grid == 0)
-		{
-			state = &hauto_io_->nogrp_[swid].newstate;
-			env->SetByteArrayRegion(byteArray, 0, sz, (jbyte *)state);
-			env->CallVoidMethod(reference_->handler_object, mid, swid, 1, sz,
-					byteArray);
-		}
-		else
-		{
-			LOGD("TTAIO: not support group\n");
-			return ;
-		}
-
-	}
-	DETACH_FROM_VM(reference_);
-}
-
-//
 // Player
 //
 int HAuto::PlayerScan()
@@ -350,7 +222,7 @@ int HAuto::PlayerGetState(int grid, unsigned char *state)
 		{
 			return -1;
 		}
-		rc = sizeof(io_state_t);
+		rc = sizeof(player_state_t);
 		memcpy(state, &hauto_player_->nogrp_[grid].newstate, rc);
 		return rc;
 	}
@@ -370,9 +242,37 @@ int HAuto::PlayerGetCharacter(int grid, unsigned char *character)
 			return -1;
 		}
 
-		rc = sizeof(io_config_t);
+		rc = sizeof(player_config_t);
 		memcpy(character, &hauto_player_->nogrp_[grid].config, rc);
 		return rc;
+	}
+
+	return -1;
+}
+
+int HAuto::PlayerGetControlData(int grid, int swid, int offset, unsigned char *buf)
+{
+	int rc;
+
+	if(hauto_player_)
+	{
+		rc = hauto_player_->GetControlData(grid, swid, offset, buf);
+		if(rc < 0)
+		{
+			return -1;
+		}
+
+		return rc;
+	}
+
+	return -1;
+}
+
+int HAuto::PlayerSetControlData(int grid, int swid, int offset, unsigned char *buf, int buflen)
+{
+	if(hauto_player_)
+	{
+		return hauto_player_->SetControlData(grid, swid, offset, buf, buflen);
 	}
 
 	return -1;
@@ -387,7 +287,6 @@ int HAuto::PlayerSet(int grid, int swid, int cmd, unsigned char *buf, int buflen
 
 	return -1;
 }
-
 void HAuto::OnSignalPlayerStateChanged(int grid, int swid)
 {
 	player_state_t *state;
@@ -422,100 +321,4 @@ void HAuto::OnSignalPlayerStateChanged(int grid, int swid)
 	DETACH_FROM_VM(reference_);
 }
 
-//
-// Motor Controller
-//
-int HAuto::MotorScan()
-{
-	if(hauto_player_)
-	{
-		hauto_player_->Scan();
-		return 0;
-	}
-
-	return -1;
-}
-
-int HAuto::MotorGetState(int grid, unsigned char *state)
-{
-	int rc;
-
-	if(hauto_player_)
-	{
-		rc = hauto_player_->GetState(0x0, grid);
-		if(rc < 0)
-		{
-			return -1;
-		}
-		rc = sizeof(io_state_t);
-		memcpy(state, &hauto_player_->nogrp_[grid].newstate, rc);
-		return rc;
-	}
-
-	return -1;
-}
-
-int HAuto::MotorGetCharacter(int grid, unsigned char *character)
-{
-	int rc;
-
-	if(hauto_player_)
-	{
-		rc = hauto_player_->GetCharacter(0x0, grid);
-		if(rc < 0)
-		{
-			return -1;
-		}
-
-		rc = sizeof(io_config_t);
-		memcpy(character, &hauto_player_->nogrp_[grid].config, rc);
-		return rc;
-	}
-
-	return -1;
-}
-
-int HAuto::MotorSet(int grid, int swid, int cmd, unsigned char *buf, int buflen)
-{
-	if(hauto_player_)
-	{
-		return hauto_player_->Set(0, grid, cmd, buf, buflen);
-	}
-
-	return -1;
-}
-
-void HAuto::OnSignalMotorStateChanged(int grid, int swid)
-{
-	player_state_t *state;
-	int sz = sizeof(player_state_t);
-
-	CALLBACK_START("handleMotorStateChanged", "(III[B)V", reference_);
-	if (mid != NULL)
-	{
-		jbyteArray byteArray;
-
-		byteArray = env->NewByteArray(sz);
-		if(byteArray == NULL)
-		{
-			LOGE("Error :  NewByteArray");
-			return;
-		}
-
-		if(grid == 0)
-		{
-			state = &hauto_player_->nogrp_[swid].newstate;
-			env->SetByteArrayRegion(byteArray, 0, sz, (jbyte *)state);
-			env->CallVoidMethod(reference_->handler_object, mid, swid, 1, sz,
-					byteArray);
-		}
-		else
-		{
-			LOGD("TTAMotor: not support group\n");
-			return ;
-		}
-
-	}
-	DETACH_FROM_VM(reference_);
-}
 }  // namespace raonix

@@ -151,6 +151,7 @@ int system_camera_change(int ch)
 {
 	int fd;
 
+	LOGD("[TRC %s:%d]", __func__, __LINE__);
 	fd = open (VDEC_DEV, O_RDWR /* required */ | O_NONBLOCK, 0);
 	if (-1 == fd)
 	{

@@ -113,9 +113,8 @@ public class HA210 {
 			mContext = context;
 			initialized = true;
 			
-			mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-
-			mApkInfo.getInfo();
+//			mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+//			mApkInfo.getInfo();
 
 			mSystemCurVersion = Build.ID;
 			mSystemCurBuildcode = getSystemBuildcode(mSystemCurVersion);
@@ -163,23 +162,6 @@ public class HA210 {
 		return nativeHAutoLightSetAll(grid, swid, on);
 	}
 	
-	public int scanIO() {
-		return nativeHAutoIOScan();
-	}
-	
-	public int getIOState(int grid, byte [] state) {
-		return nativeHAutoIOGetState(grid, state);
-	}
-
-	public int getIOCharacter(int grid, byte [] character) {
-		return nativeHAutoIOGetCharacter(grid, character);
-	}
-	
-	public int setIORelay(int grid, int swid, int val, int mask) {
-		return nativeHAutoIOSetRelay(grid, swid, val, mask);
-	}
-
-	
 	
 	
 	//
@@ -188,7 +170,7 @@ public class HA210 {
 	public int setPlayerPlay() {
 		int rc = -1;
 		try {
-			rc = setPlayer(0x00, "play".getBytes("US_ASCII"));
+			rc = setPlayer(0x0f, 0x42, "play".getBytes("US_ASCII"));
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -198,33 +180,36 @@ public class HA210 {
 	public int setPlayerStop() {
 		int rc = -1;
 		try {
-			rc = setPlayer(0x00, "stop".getBytes("US_ASCII"));
+			rc = setPlayer(0x0f, 0x42, "stop".getBytes("US_ASCII"));
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return rc;
 	}
+
 	public int setPlayerPause() {
 		int rc = -1;
 		try {
-			rc = setPlayer(0x00, "pause".getBytes("US_ASCII"));
+			rc = setPlayer(0x0f, 0x42, "pause".getBytes("US_ASCII"));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 		return rc;
 	}
-
-
-	public int setPlayer(int cmd, byte [] vals) {
-		return nativeHAutoPlayerSet(0, 1, cmd, vals, vals.length);
+	
+	public int setPlayerDownload(int offset, byte [] data) {
+		return nativeHAutoPlayerSetControlData(offset, data, data.length);
 	}
 
-	
-	
-	
-	
-	
+	public  int getPlayerUpload(int offset, byte [] data) {
+		return nativeHAutoPlayerGetControlData(offset, data);
+	}
+
+
+	public int setPlayer(int swid, int cmd, byte [] vals) {
+		return nativeHAutoPlayerSet(0, swid, cmd, vals, vals.length);
+	}
 	
 	///////////////////////////////////////////////
 	// called by JNI when device state has changed
@@ -237,11 +222,6 @@ public class HA210 {
 	protected void handlePlayerStateChanged( int grid, int swid, int len, byte state[] ) {
 		// TODO
 		Log.d(LOG_TAG, "handlePlayerStateChanged");
-	}
-
-	protected void handleIOStateChanged( int grid, int swid, int len, byte state[] ) {
-		// TODO
-		Log.d(LOG_TAG, "handleIOStateChanged");
 	}
 	///////////////////////////////////////////////
 	
@@ -837,19 +817,11 @@ public class HA210 {
 	private native int nativeHAutoPlayerSet(int grid, int swid, int cmd,
 			byte [] buf, int buflen);
 
-	// Motor Controller
-	private native int nativeHAutoMotorControllerScan();
-	private native int nativeHAutoMotorControllerGetState(int grid, byte [] state);
-	private native int nativeHAutoMotorControllerGetCharacter(int grid, byte [] character);
-	private native int nativeHAutoMotorControllerSet(int grid, int swid, int cmd,
+	private native int nativeHAutoPlayerGetControlData(int offset,
+			byte [] buf);
+	private native int nativeHAutoPlayerSetControlData(int offset,
 			byte [] buf, int buflen);
-	
-	// Home Automation - IO
-	private native int nativeHAutoIOScan();
-	private native int nativeHAutoIOGetState(int grid, byte [] state);
-	private native int nativeHAutoIOGetCharacter(int grid, byte [] character);
-	private native int nativeHAutoIOSetRelay(int grid, int swid, int val, int mask);
-	
+
 	// System
 	// H/W Watchdog
 	private native int nativeSystemChangeCamera(int ch);
