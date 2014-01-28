@@ -202,8 +202,13 @@ public class HA210 {
 		return nativeHAutoPlayerSetControlData(offset, data, data.length);
 	}
 
-	public  int getPlayerUpload(int offset, byte [] data) {
+	public int getPlayerUpload(int offset, byte [] data) {
 		return nativeHAutoPlayerGetControlData(offset, data);
+	}
+	
+	public int getPlayerUploadSize() {
+		// TODO: return nativeHAutoPlayerGetControlDataSize();
+		return 100;
 	}
 
 

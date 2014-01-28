@@ -1,6 +1,7 @@
 package com.raonix.effect4dapp;
 
 import android.app.Application;
+import android.os.Handler;
 import android.util.Log;
 
 public class Effect4DApplication extends Application
@@ -12,21 +13,44 @@ public class Effect4DApplication extends Application
 	private LightStatus mLightStatus;
 	private float mVideoSync;
 	private float mEffectSync;
+	private Handler mHandler;
 
 	public Effect4DApplication()
 	{
-		// must initialize HA210
-		byte [] devicenum = {1,1,1,1};
-		mHA210 = new HA210();
-		mHA210.init(this);
-//		mHA210.init(getApplicationContext());
-		mHA210.setDeviceNum(devicenum);
-		mHA210.changeCamera(1);
-		
 		mPlayerStatus=PlayerStatus.STOP;
 		mLightStatus=LightStatus.OFF;
 		mVideoSync=0.0F;
-		mEffectSync=0.0F;
+		mEffectSync=0.0F;			
+		mHA210=null;
+		
+		mHandler=new Handler();
+	}
+	
+
+	@Override
+	public void onCreate()
+	{
+		mHandler.post(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				// must initialize HA210
+				byte [] devicenum = {1,1,1,1};
+				HA210 ha210=new HA210();
+				ha210.init(Effect4DApplication.this);
+				ha210.setDeviceNum(devicenum);
+				ha210.changeCamera(1);
+
+				mHA210=ha210;
+
+			}
+		});
+	}
+	
+	public boolean isInitialized()
+	{
+		return mHA210!=null;
 	}
 	
 	public enum PlayerStatus
@@ -103,4 +127,18 @@ public class Effect4DApplication extends Application
 		return mEffectSync;
 	}
 	
+	public int getPlayerUplaodSize()
+	{
+		return mHA210.getPlayerUploadSize();
+	}
+	
+	public int playerDownload(int offset, byte[] data)
+	{
+		return mHA210.setPlayerDownload(offset, data);
+	}
+	
+	public int playerUpload(int offset, byte[] data)
+	{
+		return mHA210.getPlayerUpload(offset, data);
+	}
 }

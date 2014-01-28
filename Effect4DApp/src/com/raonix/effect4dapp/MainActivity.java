@@ -1,8 +1,10 @@
 package com.raonix.effect4dapp;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +15,10 @@ import android.widget.ImageView;
 
 public class MainActivity extends Activity
 {
+	private static final String LOG_TAG="MainActivity";
+	
 	private Effect4DApplication mApp;
+	private Handler mHandler;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -28,6 +33,8 @@ public class MainActivity extends Activity
 		
 		mApp=(Effect4DApplication) getApplicationContext();
 		
+		mHandler=new Handler();
+
 		initView();
 	}
 	
@@ -117,17 +124,39 @@ public class MainActivity extends Activity
 		startCameraPreview();
 	}
 	
+	
+
+	private Runnable mResurveStartPreview= new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						startCameraPreview();
+					}
+				};
+	
+	
 	private void startCameraPreview()
 	{
 		if(mPreview!=null) return;
-		
-		mPreview = new CameraPreview(this);
-		mContent.addView(mPreview);
+		if(mApp.isInitialized())
+		{
+			mPreview = new CameraPreview(this);
+			mContent.addView(mPreview);
+		}
+		else
+		{
+			TRACE("HA210 not initialized.");
+			mHandler.postDelayed(mResurveStartPreview, 1000);
+		}
 	}
 	
 	private void stopCameraPreview()
 	{
 		if(mPreview==null) return;
+
+		// 시작하는 모든 메시지는 삭제.
+		mHandler.removeCallbacks(mResurveStartPreview);
 
 		mContent.removeView(mPreview);
 		mPreview=null;
@@ -141,4 +170,25 @@ public class MainActivity extends Activity
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	
+	
+	
+	public static void TRACE(String msg)
+	{
+		if(msg==null) msg="";
+
+		String claz=Thread.currentThread().getStackTrace()[3].getClassName();
+
+//		Log.d(claz.substring(claz.lastIndexOf(".")+1),
+//				String.format("[%04d:%s] %s",
+//						Thread.currentThread().getStackTrace()[3].getLineNumber(),
+//						Thread.currentThread().getStackTrace()[3].getMethodName(),
+//						msg) );
+
+		Log.d(claz.substring(claz.lastIndexOf(".")+1),
+				String.format("[%04d] %s",
+						Thread.currentThread().getStackTrace()[3].getLineNumber(),
+						msg) );
+	}
+
 }
