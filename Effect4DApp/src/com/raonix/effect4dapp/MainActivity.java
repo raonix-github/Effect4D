@@ -1,9 +1,12 @@
 package com.raonix.effect4dapp;
 
+import com.raonix.effect4dapp.Effect4DApplication.PlayerStatus;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.app.Activity;
 import android.content.Intent;
+import android.hardware.Camera;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -12,6 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity
 {
@@ -65,7 +69,6 @@ public class MainActivity extends Activity
 		
 		mBtnRun.setBackgroundResource(R.drawable.btn_run);
 		mBtnStop.setBackgroundResource(R.drawable.btn_stop);
-//		mBtnPause.setVisibility(View.INVISIBLE);
 		mBtnPause.setBackgroundResource(R.drawable.btn_pause);
 		mBtnLight.setBackgroundResource(R.drawable.btn_light);
 
@@ -88,6 +91,7 @@ public class MainActivity extends Activity
 		mBtnRun.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				setPlayerButton(PlayerStatus.PLAY);
 				mApp.setPlayerPlay();
 			}
 		});
@@ -95,7 +99,16 @@ public class MainActivity extends Activity
 		mBtnStop.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				setPlayerButton(PlayerStatus.STOP);
 				mApp.setPlayerStop();
+			}
+		});
+
+		mBtnPause.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				setPlayerButton(PlayerStatus.PAUSE);
+				mApp.setPlayerPause();
 			}
 		});
 
@@ -103,11 +116,41 @@ public class MainActivity extends Activity
 			@Override
 			public void onClick(View v) {
 				if(v.isSelected())
+				{
+					v.setSelected(false);
 					mApp.setLightOff();
+				}
 				else
+				{
+					v.setSelected(true);
 					mApp.setLightOn();
+				}
 			}			
 		});
+	}
+	
+	private void setPlayerButton(PlayerStatus status)
+	{
+		switch(status)
+		{
+		case PLAY:
+			mBtnRun.setSelected(true);
+			mBtnStop.setSelected(false);
+			mBtnPause.setSelected(false);
+			break;
+		case PAUSE:
+			mBtnRun.setSelected(false);
+			mBtnStop.setSelected(false);
+			mBtnPause.setSelected(true);
+			break;
+
+		default:
+		case STOP:
+			mBtnRun.setSelected(false);
+			mBtnStop.setSelected(true);
+			mBtnPause.setSelected(false);
+			break;
+		}
 	}
 
 	@Override
@@ -138,17 +181,30 @@ public class MainActivity extends Activity
 	
 	private void startCameraPreview()
 	{
-		if(mPreview!=null) return;
-		if(mApp.isInitialized())
-		{
-			mPreview = new CameraPreview(this);
-			mContent.addView(mPreview);
-		}
-		else
+		if(!mApp.isInitialized())
 		{
 			TRACE("HA210 not initialized.");
 			mHandler.postDelayed(mResurveStartPreview, 1000);
+			return;
 		}
+
+		if(mPreview!=null)
+		{
+			TRACE("Camera already previewed.");
+			return;
+		}
+
+		Camera c=getCameraInstance();
+		if(c==null)
+		{
+			TRACE("Can not open camera.");
+    		Toast.makeText(this,
+    				"Can not open camera.", Toast.LENGTH_SHORT).show();
+    		return;
+		}
+
+		mPreview = new CameraPreview(this, c);
+		mContent.addView(mPreview);
 	}
 	
 	private void stopCameraPreview()
@@ -191,4 +247,18 @@ public class MainActivity extends Activity
 						msg) );
 	}
 
+	/** A safe way to get an instance of the Camera object. */
+	public static Camera getCameraInstance()
+	{
+	    Camera c = null;
+	    try
+	    {
+	        c = Camera.open(); // attempt to get a Camera instance
+	    }
+	    catch (Exception e)
+	    {
+	        // Camera is not available (in use or does not exist)
+	    }
+	    return c; // returns null if camera is unavailable
+	}
 }
